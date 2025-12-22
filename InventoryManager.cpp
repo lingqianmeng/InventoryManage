@@ -108,3 +108,93 @@ void InventoryManager::displayAllItems() const
         items[i] -> display();
     }
 }
+
+// Get the item count
+std::size_t InventoryManager::getItemCount() const
+{
+    return itemCount;
+}
+
+// Search for an item by name
+InventoryItem* InventoryManager::searchByName(const std::string& name)
+{
+    for (std::size_t i = 0; i < itemCount; ++i)
+    {
+        if (items[i] -> getName() == name)
+        {
+            return items[i];
+        }
+    }
+
+    return nullptr;
+}
+
+// Update an item's properties
+bool InventoryManager::updateItem(int id, const std::string& name, int quantity)
+{
+    // Update an InventoryItem stored in the items array
+    // 1. Find the item by ID
+    InventoryItem* item = getItemById(id);
+
+    // 2. Return false if the item was not found
+    if (item == nullptr)
+    {
+        std::cout << "Item with ID" << id << " not found." << std::endl;
+        return false;
+    }
+
+    // 3. If the item is found:
+    // - update the name if a new name was provided
+    if (item -> getName() != name && !name.empty())
+    {
+        item -> setName(name);
+    }
+
+    // - update the quantity if a valid new quantity was provided
+    if (item -> getQuantity() != quantity && quantity >= 0)
+    {
+        item -> setQuantity(quantity);
+    }
+
+    // 4. Return true
+    return true;
+}
+
+// Remove an item
+bool InventoryManager::removeItem(int id)
+{
+    // Remove the item with the specified ID
+    // 1. Find the item in the array
+    // 2. Delete the InventoryItem object
+    // 3. Shift the remaining pointers to fill the gap
+    // 4. Update itemCount
+    // 5. Return true if successful, false otherwise
+
+    InventoryItem* item = getItemById(id);
+    if (item == nullptr)
+    {
+        std::cout << "Item with ID " << id << " not found." << std::endl;
+        return false;
+    }
+
+    for (std::size_t i = 0; i < itemCount; ++i)
+    {
+        if (items[i] -> getId() == id)
+        {
+            delete items[i];
+            // Shift remaining pointers
+            for (std::size_t j = i; j < itemCount - 1; ++j)
+            {
+                items[j] = items[j + 1];
+            }
+            // Optional: set last pointer to nullptr, if the item is not the last one in the array.
+            if (i < itemCount - 1)
+            {
+                items[itemCount - 1] = nullptr;
+            }
+            itemCount--;
+        }
+    }
+
+    return true;
+}
