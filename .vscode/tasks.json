@@ -12,7 +12,7 @@
                 "${workspaceFolder}/src/core/*.cpp",
                 "-I${workspaceFolder}/src/core", // Tell the compiler to look in 'core' for .h files
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${workspaceFolder}\\bin\\${fileBasenameNoExtension}.exe"
             ],
             "options": {
                 "cwd": "${fileDirname}"
