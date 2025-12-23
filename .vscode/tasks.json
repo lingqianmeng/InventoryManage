@@ -7,8 +7,10 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "-std=c++17",
-                "${fileDirname}/*.cpp", 
+                "-std=c++20",
+                "${workspaceFolder}/src/*.cpp",
+                "${workspaceFolder}/src/core/*.cpp",
+                "-I${workspaceFolder}/src/core", // Tell the compiler to look in 'core' for .h files
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
