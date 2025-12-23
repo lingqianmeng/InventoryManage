@@ -94,6 +94,7 @@ InventoryItem* InventoryManager::getItemById(int id)
 // Display all items
 void InventoryManager::displayAllItems() const
 {
+    std::cout << "---Display On---" << std::endl;
     // Display all items in the inventory
     // 1. Check if the inventory is empty
     if (itemCount == 0)
@@ -107,6 +108,8 @@ void InventoryManager::displayAllItems() const
     {
         items[i] -> display();
     }
+
+    std::cout << "---Display Off---" << std::endl;
 }
 
 // Get the item count
@@ -116,7 +119,7 @@ std::size_t InventoryManager::getItemCount() const
 }
 
 // Search for an item by name
-InventoryItem* InventoryManager::searchByName(const std::string& name)
+InventoryItem* InventoryManager::searchByName(const std::string& name) const
 {
     for (std::size_t i = 0; i < itemCount; ++i)
     {
@@ -127,6 +130,19 @@ InventoryItem* InventoryManager::searchByName(const std::string& name)
     }
 
     return nullptr;
+}
+
+void InventoryManager::displayByName(const std::string& name) const
+{
+    InventoryItem* searchResult = this->searchByName(name);
+    if (searchResult != nullptr)
+    {
+        searchResult->display();
+    }
+    else
+    {
+        std::cout << "Item with name " << name << " not found." << std::endl;
+    }
 }
 
 // Update an item's properties
@@ -196,5 +212,6 @@ bool InventoryManager::removeItem(int id)
         }
     }
 
+    std::cout << "Item with ID " << id << " is now removed." << std::endl;
     return true;
 }
