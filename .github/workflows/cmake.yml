@@ -1,0 +1,33 @@
+name: Build and Test
+
+# Trigger on every push and pull request
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Test on both Windows (your local env) and Ubuntu (Linux standard)
+        os: [windows-latest, ubuntu-latest]
+
+    steps:
+    # 1. Download your code
+    - uses: actions/checkout@v4
+
+    # 2. Configure CMake
+    # -DCMAKE_BUILD_TYPE=Release makes it run faster
+    - name: Configure CMake
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+    # 3. Compile the code
+    # --config Release is needed for Windows (Visual Studio)
+    - name: Build
+      run: cmake --build build --config Release
+
+    # 4. Run Tests
+    # --output-on-failure prints the error log if a test fails
+    - name: Test
+      run: ctest --test-dir build -C Release --output-on-failure
