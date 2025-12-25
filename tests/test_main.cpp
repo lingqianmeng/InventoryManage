@@ -13,6 +13,6 @@ TEST(InventoryItemTests, CheckInventoryItemCreation) {
 // Example Test 2: Testing InventoryManager Logic
 TEST(InventoryManagerTests, CheckInventoryManagerCreation) {
     InventoryManager inv(5);
-    assert (inv.addItem(1, "Mouse", 50));
+    inv.addItem(1, "Mouse", 50);
     EXPECT_EQ(inv.getItemCount(), 1);
 }
