@@ -1,3 +1,4 @@
+[![Build and Test](https://github.com/lingqianmeng/InventoryManage/actions/workflows/cmake.yml/badge.svg)](https://github.com/lingqianmeng/InventoryManage/actions/workflows/cmake.yml)
 # InventoryManage
 A lightweight, C++ based Inventory Management System designed to track products, manage stock levels, and organize warehouse data efficiently.
 
