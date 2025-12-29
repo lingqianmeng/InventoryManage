@@ -1,3 +1,4 @@
+/* modified with C++ 11*/
 #pragma once
 
 /**
@@ -6,23 +7,23 @@
 class InventoryItem 
 {
 private:
-    int id;
-    std::string name;
-    int quantity;   
+    int id_;
+    std::string name_;
+    int quantity_;   
 public:
     /* Default constructor */
-    InventoryItem();
+    InventoryItem() = default;
 
     /* Parameterized constructor */
     InventoryItem(int id, const std::string& name, int quantity);
     
     /* Destructor*/
-    ~InventoryItem();
+    ~InventoryItem() = default;
     
     /* Getters */
-    int getId() const;
-    std::string getName() const;
-    int getQuantity() const; 
+    int getId() const noexcept;
+    std::string getName() const noexcept;
+    int getQuantity() const noexcept; 
     void display() const;
     
     /* Setters */   

@@ -1,52 +1,40 @@
+/* modified with C++ 11*/
+
 #include <iostream>
 #include "InventoryItem.h"
 
-// Constructor
-InventoryItem::InventoryItem() : id(0), name(""), quantity(0)
-{
-    // Default constructor body (if needed)
-}
-
 // Parameterized constructor
-InventoryItem::InventoryItem(int id, const std::string& name, int quantity)
+InventoryItem::InventoryItem(int id, const std::string& name, int quantity) : id_(id), name_(name), quantity_(quantity < 0 ? 0 : quantity)
 {
-    this->id = id;
-    this->name = name;
-    this->quantity = quantity < 0 ? 0 : quantity;
-}
-
-InventoryItem::~InventoryItem()
-{
-       // Destructor body (if needed)
 }
 
 // Getters
-int InventoryItem::getId() const
+int InventoryItem::getId() const noexcept
 {
-    return id;
+    return id_;
 }
 
-std::string InventoryItem::getName() const
+std::string InventoryItem::getName() const noexcept
 {
-    return name;
+    return name_;
 }
 
-int InventoryItem::getQuantity() const
+int InventoryItem::getQuantity() const noexcept
 {
-    return quantity;
+    return quantity_;
 }
 
 // Setters
 void InventoryItem::setName(const std::string& newName)
 {
-    this->name = newName;
+    this->name_ = newName;
 }
 
 void InventoryItem::setQuantity(int newQuantity)
 {
     if (newQuantity >= 0)
     {
-        this->quantity = newQuantity;
+        this->quantity_ = newQuantity;
     }
     else 
     {
@@ -58,5 +46,5 @@ void InventoryItem::setQuantity(int newQuantity)
 // Display item details
 void InventoryItem::display() const
 {
-    std::cout << "Item ID: " << id << ", Name: " << name << ", Quantity: " << quantity << std::endl;
+    std::cout << "Item ID: " << id_ << ", Name: " << name_ << ", Quantity: " << quantity_ << std::endl;
 }
