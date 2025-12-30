@@ -5,8 +5,9 @@
 // Constructor
 InventoryManager::InventoryManager(std::size_t capacity) :
     capacity_(capacity),
-    items_(std::vector<std::unique_ptr<InventoryItem>>(capacity, nullptr))
+    items_()
 {
+    items_.reserve(capacity_);
 }
 
 // Add a new item to inventory
