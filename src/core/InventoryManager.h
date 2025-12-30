@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <cstddef>
 
 /**
  * @class InventoryManager

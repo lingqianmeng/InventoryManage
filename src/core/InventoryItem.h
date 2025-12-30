@@ -1,5 +1,6 @@
 /* modified with C++ 11*/
 #pragma once
+#include <string>
 
 /**
  * Represents an inventory item with ID, name, and quantity.
