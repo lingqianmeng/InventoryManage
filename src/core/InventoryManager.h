@@ -53,7 +53,7 @@ public:
      * @param name The name to search for
      * @return Pointer to the first matching item, or nullptr if not found
      */
-    InventoryItem *searchByName(const std::string &name) const noexcept;
+    InventoryItem *searchByName(const std::string &name) const;
 
     /**
      * @brief Add a new item to the inventory

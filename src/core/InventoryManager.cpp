@@ -48,7 +48,7 @@ bool InventoryManager::addItem(int id, const std::string& name, int quantity)
 }
 
 // Get an item by ID
-InventoryItem* InventoryManager::getItemById(int id)
+InventoryItem* InventoryManager::getItemById(int id) noexcept
 {
     // TODO: Find and return the item with the specified ID
     // 1. Loop through the items array
@@ -96,7 +96,7 @@ std::size_t InventoryManager::getItemCount() const noexcept
 }
 
 // Search for an item by name
-InventoryItem* InventoryManager::searchByName(const std::string& name) const
+InventoryItem* InventoryManager::searchByName(const std::string& name) const    
 {
     for (auto const& item : items_)
     {
