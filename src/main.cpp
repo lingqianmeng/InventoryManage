@@ -24,8 +24,8 @@ int main()
     // Display all items again
     managerHygie.displayAllItems();
     // Display item by name
-    managerHygie.displayByName("Toothpaste"); // Existing item
-    managerHygie.displayByName("Toothbrash"); // Non-existing item
+    managerHygie.searchByName("Toothpaste"); // Existing item
+    managerHygie.searchByName("Toothbrash"); // Non-existing item
     // Get item count
     std::cout << "Total items in inventory: " << managerHygie.getItemCount() << std::endl;
     // Program end

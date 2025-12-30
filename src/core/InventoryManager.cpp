@@ -1,33 +1,12 @@
+/* modified with C++ 11*/
 #include <iostream>     
 #include "InventoryManager.h"
 
 // Constructor
-InventoryManager::InventoryManager(std::size_t capacity)
+InventoryManager::InventoryManager(std::size_t capacity) :
+    capacity_(capacity),
+    items_(std::vector<std::unique_ptr<InventoryItem>>(capacity, nullptr))
 {
-    // Initialize member variables
-    this->capacity = capacity;
-    itemCount = 0;
-    items = new InventoryItem *[capacity]; // Allocate memory for array of pointers
-
-    // Initialize all pointers to nullptr
-    for (std::size_t i = 0; i < capacity; ++i)
-    {
-        items[i] = nullptr;
-    }
-}
-
-// Destructor
-InventoryManager::~InventoryManager()
-{
-    // Clean up dynamically allocated memory
-    // 1. Delete each InventoryItem object
-    for (std::size_t i = 0; i < itemCount; ++i)
-    {
-        delete items[i]; 
-    }
-
-    // 2. Delete the array of pointers
-    delete[] items; 
 }
 
 // Add a new item to inventory
@@ -41,32 +20,29 @@ bool InventoryManager::addItem(int id, const std::string& name, int quantity)
     // 5. Return true if successful, false otherwise
 
     // Check if the inventory is full
-    if (itemCount >= capacity)
+    if (items_.size() >= capacity_)
     {
         // output error message
-        std::cout << "Inventory is full. Can not add any more Items." << std::endl;
+        std::cout << "Inventory capacity exceeded. Can not add Item." << std::endl;
         return false;
     }
 
     // Check if the Item ID already exists
-    for (std::size_t i = 0; i < itemCount; ++i)
+    if (getItemById(id))
     {
-        if (items[i]->getId() == id)
-        {
-            // output error message
-            std::cout << "Item with ID " << id << " already exists." << std::endl;
-            return false;
-        }
+        // Item with the same ID already exists
+        std::cout << "Item with ID " << id << " already exists." << std::endl;
+        return false;
     }
 
     // Create a new InventoryItem object
-    items[itemCount] = new InventoryItem(id, name, quantity);
-    itemCount++;
+    auto item = std::make_unique<InventoryItem>(id, name, quantity);
+    items_.push_back(std::move(item));
 
     // output success message
     std::cout << "Item with ID " << id << " added successfully." << std::endl;
     // output current item count
-    std::cout << "Current item count: " << itemCount << std::endl;
+    std::cout << "Current item count: " << items_.size() << std::endl;
 
     return true;
 }
@@ -79,14 +55,13 @@ InventoryItem* InventoryManager::getItemById(int id)
     // 2. Check each item's ID
     // 3. Return the pointer if found, or nullptr if not found
     // Check if an item with the same ID 
-    for (std::size_t i = 0; i < itemCount; ++i)
+    for (const auto& item : items_)
     {
-        if (items[i]->getId() == id)
+        if (item && item->getId() == id)
         {
-            return items[i]; // Duplicate ID
+            return item.get(); // found
         }
     }
-
     // not found
     return nullptr; 
 }
@@ -97,52 +72,43 @@ void InventoryManager::displayAllItems() const
     std::cout << "---Display On---" << std::endl;
     // Display all items in the inventory
     // 1. Check if the inventory is empty
-    if (itemCount == 0)
+    if (items_.empty())
     {
         std::cout << "Inventory is empty." << std::endl;
         return;
     }
 
     // 2. Loop through the items and display each one
-    for (std::size_t i = 0; i < itemCount; ++i)
+    for (const auto& item : items_)
     {
-        items[i] -> display();
+        if (item)
+        {
+            item->display();
+        }
     }
-
     std::cout << "---Display Off---" << std::endl;
 }
 
 // Get the item count
-std::size_t InventoryManager::getItemCount() const
+std::size_t InventoryManager::getItemCount() const noexcept
 {
-    return itemCount;
+    return items_.size();
 }
 
 // Search for an item by name
 InventoryItem* InventoryManager::searchByName(const std::string& name) const
 {
-    for (std::size_t i = 0; i < itemCount; ++i)
+    for (auto const& item : items_)
     {
-        if (items[i] -> getName() == name)
+        if (item && item->getName() == name)
         {
-            return items[i];
+            item->display();
+            return item.get(); // found
         }
     }
-
+    // not found
+    std::cout << "Item with name " << name << " not found." << std::endl;
     return nullptr;
-}
-
-void InventoryManager::displayByName(const std::string& name) const
-{
-    InventoryItem* searchResult = this->searchByName(name);
-    if (searchResult != nullptr)
-    {
-        searchResult->display();
-    }
-    else
-    {
-        std::cout << "Item with name " << name << " not found." << std::endl;
-    }
 }
 
 // Update an item's properties
@@ -161,15 +127,15 @@ bool InventoryManager::updateItem(int id, const std::string& name, int quantity)
 
     // 3. If the item is found:
     // - update the name if a new name was provided
-    if (item -> getName() != name && !name.empty())
+    if (item->getName() != name && !name.empty())
     {
-        item -> setName(name);
+        item->setName(name);
     }
 
     // - update the quantity if a valid new quantity was provided
-    if (item -> getQuantity() != quantity && quantity >= 0)
+    if (item->getQuantity() != quantity && quantity >= 0)
     {
-        item -> setQuantity(quantity);
+        item->setQuantity(quantity);
     }
 
     // 4. Return true
@@ -193,25 +159,16 @@ bool InventoryManager::removeItem(int id)
         return false;
     }
 
-    for (std::size_t i = 0; i < itemCount; ++i)
+    for (auto it = items_.begin(); it != items_.end(); ++it)
     {
-        if (items[i] -> getId() == id)
+        if ((*it)->getId() == id)
         {
-            delete items[i];
-            // Shift remaining pointers
-            for (std::size_t j = i; j < itemCount - 1; ++j)
-            {
-                items[j] = items[j + 1];
-            }
-            // Optional: set last pointer to nullptr, if the item is not the last one in the array.
-            if (i < itemCount - 1)
-            {
-                items[itemCount - 1] = nullptr;
-            }
-            itemCount--;
+            items_.erase(it);
+            std::cout << "Item with ID " << id << " removed successfully." << std::endl;
+            return true;
         }
     }
 
-    std::cout << "Item with ID " << id << " is now removed." << std::endl;
-    return true;
+    std::cout << "Failed to remove item with ID " << id << "." << std::endl;
+    return false;
 }

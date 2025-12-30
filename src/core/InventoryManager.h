@@ -1,5 +1,9 @@
+/* modified with C++ 11*/
 #pragma once
 #include "InventoryItem.h"
+#include <vector>
+#include <memory>
+#include <string>
 
 /**
  * @class InventoryManager
@@ -12,9 +16,8 @@
 class InventoryManager 
 {
 private:
-    InventoryItem **items; // Array of pointers to InventoryItem objects
-    std::size_t capacity;  // Maximum number of items the manager can hold
-    std::size_t itemCount; // Current number of items in the manager
+    std::vector<std::unique_ptr<InventoryItem>> items_; // Array of pointers to InventoryItem objects
+    std::size_t capacity_;                              // Maximum number of items the manager can hold
 public:
     /**
      * @brief Constructor - initializes the inventory manager with a given capacity
@@ -25,14 +28,14 @@ public:
     /**
      * @brief Destructor - responsible for cleaning up dynamically allocated memory
      */
-    ~InventoryManager();
+    ~InventoryManager() = default;
 
     /**
      * @brief Get an item by its ID
      * @param id The ID of the item to retrieve
      * @return Pointer to the found item, or nullptr if not found
      */
-    InventoryItem *getItemById(int id);
+    InventoryItem* getItemById(int id) noexcept;
 
     /**
      * @brief Display all items in the inventory
@@ -43,20 +46,14 @@ public:
      * @brief Get the current number of items in the inventory
      * @return The item count
      */
-    std::size_t getItemCount() const;
+    std::size_t getItemCount() const noexcept;
 
     /**
      * @brief Search for an item by name
      * @param name The name to search for
      * @return Pointer to the first matching item, or nullptr if not found
      */
-    InventoryItem *searchByName(const std::string &name) const;
-    
-    /**
-     * @brief Find and display item by name
-     * @param name The name to search from inventory and display
-     */
-    void displayByName(const std::string& name) const;
+    InventoryItem *searchByName(const std::string &name) const noexcept;
 
     /**
      * @brief Add a new item to the inventory
