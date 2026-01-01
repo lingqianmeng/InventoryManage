@@ -38,22 +38,21 @@ FetchContent_MakeAvailable(googletest)
 # This command automatically finds every .cpp file inside src/core/
 # So you don't need to manually type InventoryItem.cpp, Product.cpp, etc.
 file(GLOB CORE_SOURCES "src/core/*.cpp")
+file(GLOB TEST_SOURCES "tests/*.cpp")
 
 # 1. The Main Application
 add_executable(InventoryApp 
     src/main.cpp 
-    ${CORE_SOURCES}
+    ${CORE_SOURCES}       # Include all src/core files here
 )
 
 # 2. The Test Suite
 enable_testing()
 
 # Create a separate executable just for tests
-add_executable(unit_tests 
-    tests/test_main.cpp  
-    tests/test_InventoryItem.cpp
-    tests/test_InventoryManager.cpp
-    ${CORE_SOURCES}      # Re-use your logic files here
+add_executable(unit_tests
+    ${TEST_SOURCES}       # Include all your test files
+    ${CORE_SOURCES}       # Include all src/core files here
 )
 
 # Link GoogleTest to your test executable
