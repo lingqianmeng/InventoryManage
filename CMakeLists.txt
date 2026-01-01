@@ -40,14 +40,19 @@ FetchContent_MakeAvailable(googletest)
 file(GLOB CORE_SOURCES "src/core/*.cpp")
 
 # 1. The Main Application
-add_executable(InventoryApp src/main.cpp ${CORE_SOURCES})
+add_executable(InventoryApp 
+    src/main.cpp 
+    ${CORE_SOURCES}
+)
 
 # 2. The Test Suite
 enable_testing()
 
 # Create a separate executable just for tests
 add_executable(unit_tests 
-    tests/test_main.cpp  # We will create this file next
+    tests/test_main.cpp  
+    tests/test_InventoryItem.cpp
+    tests/test_InventoryManager.cpp
     ${CORE_SOURCES}      # Re-use your logic files here
 )
 
