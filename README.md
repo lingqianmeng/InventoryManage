@@ -1,5 +1,5 @@
 [![Build and Test](https://github.com/lingqianmeng/InventoryManage/actions/workflows/cmake.yml/badge.svg)](https://github.com/lingqianmeng/InventoryManage/actions/workflows/cmake.yml)
-# InventoryManage
+# Inventory Manager C++
 A lightweight, C++-based Inventory Management System for tracking products, managing stock levels, and organizing warehouse data from the command line. This repository now includes CMake-based build configuration, GoogleTest-powered unit tests, and a GitHub Actions CI workflow that builds and runs tests on each push and PR.
 
 ## 📌 Project Overview
